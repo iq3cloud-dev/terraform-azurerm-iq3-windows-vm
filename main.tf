@@ -63,6 +63,17 @@ resource "azurerm_windows_virtual_machine" "virtual_machine" {
   }
 }
 
+########################
+# Backup Configuration #
+########################
+
+resource "azurerm_backup_protected_vm" "backup_configuration" {
+  resource_group_name = "iq3-basemanagement"
+  recovery_vault_name = var.vm_recovery_vault
+  source_vm_id        = azurerm_windows_virtual_machine.virtual_machine.id
+  backup_policy_id    = data.azurerm_backup_policy_vm.backup_policy.id
+}
+
 #################
 # VM Extensions #
 #################
@@ -89,11 +100,11 @@ SETTINGS
 }
 
 resource "azurerm_virtual_machine_extension" "monitoringWindows" {
-  name                 = "iq3-Management-Monitoring"
-  virtual_machine_id   = azurerm_windows_virtual_machine.virtual_machine.id
-  publisher            = "Microsoft.EnterpriseCloud.Monitoring"
-  type                 = "MicrosoftMonitoringAgent"
-  type_handler_version = "1.0"
+  name                       = "iq3-Management-Monitoring"
+  virtual_machine_id         = azurerm_windows_virtual_machine.virtual_machine.id
+  publisher                  = "Microsoft.EnterpriseCloud.Monitoring"
+  type                       = "MicrosoftMonitoringAgent"
+  type_handler_version       = "1.0"
   auto_upgrade_minor_version = true
 
   settings = <<SETTINGS

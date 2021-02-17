@@ -53,3 +53,14 @@ data "azurerm_log_analytics_workspace" "workspace" {
   name                = var.la_workspace_name
   resource_group_name = "iq3-basemanagement"
 }
+
+data "azurerm_recovery_services_vault" "recovery_vault" {
+  name                = var.vm_recovery_vault
+  resource_group_name = "iq3-basemanagement"
+}
+
+data "azurerm_backup_policy_vm" "backup_policy" {
+  name                = "DefaultPolicy"
+  recovery_vault_name = data.azurerm_recovery_services_vault.recovery_vault.name
+  resource_group_name = "iq3-basemanagement"
+}

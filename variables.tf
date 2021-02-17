@@ -75,21 +75,26 @@ variable "vm_version" {
 }
 
 variable "vm_publisher" {
-    type = string
-    description = "The publisher of the Windows VM image"
-    default = "MicrosoftWindowsServer"
+  type        = string
+  description = "The publisher of the Windows VM image"
+  default     = "MicrosoftWindowsServer"
 }
 
 variable "vm_offer" {
-    type = string 
-    description = "The offer of the Windows VM image"
-    default = "WindowsServer"
+  type        = string
+  description = "The offer of the Windows VM image"
+  default     = "WindowsServer"
 }
 
 variable "vm_enable_disk_encryption" {
-    type = bool 
-    description = "The offer of the Windows VM image"
-    default = true
+  type        = bool
+  description = "The offer of the Windows VM image"
+  default     = true
+}
+
+variable "vm_recovery_vault" {
+  type        = string
+  description = "The recovery vault to configure virtual machine for Backup in base management (using DefaultPolicy). Make sure, that pipeline has Contributor access to Recovery Vault."
 }
 
 ##############
@@ -97,6 +102,6 @@ variable "vm_enable_disk_encryption" {
 ##############
 
 variable "la_workspace_name" {
-    type = string 
-    description = "The name of the log analytics workspace within iq3-basemanagement"
+  type        = string
+  description = "The name of the log analytics workspace within iq3-basemanagement"
 }
