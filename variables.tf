@@ -97,11 +97,16 @@ variable "vm_recovery_vault" {
   description = "The recovery vault to configure virtual machine for Backup in base management (using DefaultPolicy). Make sure, that pipeline has Contributor access to Recovery Vault."
 }
 
-##############
-# Monitoring #
-##############
+###################################
+# Monitoring and Patch management #
+###################################
 
 variable "la_workspace_name" {
   type        = string
   description = "The name of the log analytics workspace within iq3-basemanagement"
+}
+
+variable "iaas_logging_account_name" {
+  type        = string
+  description = "The logging Account within iq3-basemanagement to enable Patch Management for virtual machine"
 }

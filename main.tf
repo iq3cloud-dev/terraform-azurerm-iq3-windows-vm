@@ -140,3 +140,14 @@ resource "azurerm_virtual_machine_extension" "antimalware" {
   }
   SETTINGS
 }
+
+resource "azurerm_virtual_machine_extension" "iaas_diagnostics" {
+  name                       = "${var.vm_name}-IaaSDiagnostics"
+  virtual_machine_id         = azurerm_windows_virtual_machine.virtual_machine.id
+  publisher                  = "Microsoft.Azure.Diagnostics"
+  type                       = "IaaSDiagnostics"
+  type_handler_version       = "1.9"
+  auto_upgrade_minor_version = true
+  settings                   = data.template_file.iaas_diagnostics_extension_settings.rendered
+  protected_settings         = data.template_file.iaas_diagnostics_extension_protected_settings.rendered
+}

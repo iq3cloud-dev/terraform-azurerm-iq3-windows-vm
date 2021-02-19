@@ -64,3 +64,26 @@ data "azurerm_backup_policy_vm" "backup_policy" {
   recovery_vault_name = data.azurerm_recovery_services_vault.recovery_vault.name
   resource_group_name = "iq3-basemanagement"
 }
+
+data "azurerm_storage_account" "logging_storage_account" {
+  name                = var.iaas_logging_account_name
+  resource_group_name = "iq3-basemanagement"
+}
+
+data "template_file" "iaas_diagnostics_extension_settings" {
+  template = file("${path.module}/iaasDiagnosticsExtensionSettingsTemplate.json.tpl")
+
+  vars = {
+    log_storage_account_name = data.azurerm_storage_account.logging_storage_account.name
+    virtual_machine_id       = azurerm_windows_virtual_machine.virtual_machine.id
+  }
+}
+
+data "template_file" "iaas_diagnostics_extension_protected_settings" {
+  template = file("${path.module}/iaasDiagnosticsExtensionProtectedSettingsTemplate.json.tpl")
+
+  vars = {
+    log_storage_account_name = data.azurerm_storage_account.logging_storage_account.name
+    log_storage_account_key  = data.azurerm_storage_account.logging_storage_account.primary_access_key
+  }
+}
