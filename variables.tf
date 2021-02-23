@@ -110,3 +110,17 @@ variable "iaas_logging_account_name" {
   type        = string
   description = "The logging Account within iq3-basemanagement to enable Patch Management for virtual machine"
 }
+
+###############
+# Domain Join #
+###############
+variable "domain_join_settings" {
+  type = object({
+    domain_name             = string
+    username_key_vault_name = string
+    password_key_vault_name = string
+    ou_path                 = string
+  })
+  default     = null
+  description = "Pass in a Domain Name, OU Path, as well as the names of secrets for username and password of a active directory user that is allowed to domain join virtual machines. The secrets are taken out of the key vault that was defined per variable vm_encryption_key_vault_name"
+}

@@ -151,3 +151,31 @@ resource "azurerm_virtual_machine_extension" "iaas_diagnostics" {
   settings                   = data.template_file.iaas_diagnostics_extension_settings.rendered
   protected_settings         = data.template_file.iaas_diagnostics_extension_protected_settings.rendered
 }
+
+resource "azurerm_virtual_machine_extension" "domain_Join" {
+  lifecycle {
+    prevent_destroy = true
+  }
+  count = var.domain_join_settings == null ? 0 : 1
+
+  name                 = "ADDomainJoin"
+  virtual_machine_id   = azurerm_windows_virtual_machine.virtual_machine.id
+  publisher            = "Microsoft.Compute"
+  type                 = "JsonADDomainExtension"
+  type_handler_version = "1.3"
+
+  settings           = <<SETTINGS
+{
+  "Name" : "${var.domain_join_settings.domain_name}",
+  "User" : "henkelgroup.net\\${data.azurerm_key_vault_secret.domainjoin_user[0].value}",
+  "OUPath" : "${var.domain_join_settings.ou_path}",
+  "Restart" : "true",
+  "Options" : 3
+}
+SETTINGS
+  protected_settings = <<PROTECTED_SETTINGS
+{
+  "Password" : "${data.azurerm_key_vault_secret.domainjoin_password[0].value}"
+}
+PROTECTED_SETTINGS
+}

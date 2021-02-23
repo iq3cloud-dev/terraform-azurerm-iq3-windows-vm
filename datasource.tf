@@ -49,6 +49,20 @@ data "azurerm_key_vault_key" "encryption_key" {
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
+data "azurerm_key_vault_secret" "domainjoin_password" {
+  name         = var.domain_join_settings.password_key_vault_name
+  key_vault_id = data.azurerm_key_vault.kv.id
+
+  count = var.domain_join_settings == null ? 0 : 1
+}
+
+data "azurerm_key_vault_secret" "domainjoin_user" {
+  name         = var.domain_join_settings.username_key_vault_name
+  key_vault_id = data.azurerm_key_vault.kv.id
+
+  count = var.domain_join_settings == null ? 0 : 1
+}
+
 data "azurerm_log_analytics_workspace" "workspace" {
   name                = var.la_workspace_name
   resource_group_name = "iq3-basemanagement"
