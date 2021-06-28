@@ -17,11 +17,27 @@
 # For questions and contributions please contact info@iq3cloud.com
 # https://github.com/iq3cloud-dev/terraform-azurerm-iq3-windows-vm
 
+#########################
+# General Configuration #
+#########################
 variable "resource_group_name" {
   type        = string
   description = "The resource group, where the virtual machine should be placed into"
 }
 
+variable "vm_name" {
+  type        = string
+  description = "The name of the virtual machine. This will be also the prefix for all related items"
+
+  validation {
+    condition     = length(var.vm_name) >= 3 && length(var.vm_name) <= 15
+    error_message = "The vm_name length must be between 3 and 15 characters."
+  }
+}
+
+#########################
+# Network Configuration #
+#########################
 variable "vnet_resource_group_name" {
   type        = string
   description = "The resource group, where network components are located"
@@ -37,16 +53,14 @@ variable "vnet_subnet_name" {
   description = "The subnet name inside the virtual network of the virtual machine"
 }
 
-variable "vm_name" {
-  type        = string
-  description = "The name of the virtual machine. This will be also the prefix for all related items"
-
-  validation {
-    condition     = length(var.vm_name) >= 3 && length(var.vm_name) <= 15
-    error_message = "The vm_name length must be between 3 and 15 characters."
-  }
+variable "application_security_groups" {
+  type    = list(string)
+  default = []
 }
 
+####################
+# VM Configuration #
+####################
 variable "vm_size" {
   type        = string
   description = "The size of the virtual machine"

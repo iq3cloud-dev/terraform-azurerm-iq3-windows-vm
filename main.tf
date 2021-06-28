@@ -179,3 +179,9 @@ SETTINGS
 }
 PROTECTED_SETTINGS
 }
+
+resource "azurerm_network_interface_application_security_group_association" "pbicloud_rdp_asg" {
+  for_each                      = toset(var.application_security_groups)
+  network_interface_id          = azurerm_network_interface.nic.id
+  application_security_group_id = each.key
+}
