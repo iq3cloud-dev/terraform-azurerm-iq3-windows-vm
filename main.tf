@@ -62,7 +62,7 @@ resource "azurerm_windows_virtual_machine" "virtual_machine" {
     version   = var.vm_version
   }
 
-  tags {
+  tags = {
     deploymentType = "terraform"
   }
 }
